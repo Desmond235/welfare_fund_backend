@@ -11,7 +11,7 @@ conn.connect((err) => {
     if(err) throw `Error connecting to database: ${err}`;
     console.log("connected to database successfully");
 });
-conn.end();
+
 module.exports = conn;
 
 

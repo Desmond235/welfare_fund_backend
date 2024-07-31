@@ -1,125 +1,175 @@
 const express = require('express');
 const router = express.Router();
 const { signupValidation, loginValidation } = require('./validation/validation');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const db = require('../dbConnection');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const e = require('express');
 
+const data = [];
+const sData = [];
 
-router.post('/signup', signupValidation, (req, res) => {
-    const { username, email, password } = req.body;
-    db.query(`SELECT * FROM users WHERE username =${db.escape(username)
-        };`,
+router.post('/signup', signupValidation, (req, res, next) => {
+    const pData = {
+        "username": req.body.username,
+        "email": req.body.email,
+        "contact": req.body.contact,
+        "password": req.body.password
+    }
+    data.push(pData);
+    console.log("final product", pData);
+    db.query(
+        'SELECT * FROM signup WHERE email = ?',
+        [req.body.email],
         (err, result) => {
-            if (err) throw `something went wrong ${err}`
-            if (result.length) {
-                return result.status(409).json(
-                    {
-                        message: 'This username is already taken'
-
-                    }
-                );
-            } else {
-                bcrypt.hash(password, (err, hash) => {
-                    if (err) {
-                        res.status(500).json({ message: err });
-                    } else {
-                        db.query(`INSERT INTO users VALUES(
-                            ${db.escape(username)},
-                            ${db.escape(email)},
-                            ${db.escape(hash)}
-                            )`,
-                            (err, result) => {
-                                if (err) {
-                                    return res.status(400).json({
-                                        err: err.message || 'Something went wrong'
-                                    });
-                                }
-                                else {
-                                    return res.status(201).json({
-                                        message: 'You have registered successfully'
-                                    });
-                                }
-                            }
-                        );
-                    }
+            if (err) {
+                return res.status(500).json({
+                    message: err.message || 'Internal server error'
                 });
             }
-        })
+
+            if (result.length) {
+                return res.status(409).json({
+                    message: 'Email already in use',
+                });
+            } else {
+                bcrypt.hash(req.body.password, 10, (err, hash) => {
+                    if (err) {
+                        return res.status(500).json({
+                            message: err.message || 'Error hashing password'
+                        });
+                    }
+
+                    db.query(
+                        'INSERT INTO signup (username, email, contact, password) VALUES (?, ?, ?, ?)',
+                        [req.body.username, req.body.email,req.body.contact, hash],
+                        (err, result) => {
+                            if (err) {
+                                return res.status(400).json({
+                                    message: err.message || 'Something went wrong',
+                                });
+                            }
+
+                            return res.status(201).json({
+                                message: 'You have registered successfully',
+                            });
+                        }
+                    );
+                });
+            }
+        }
+    );
+
 });
 
 router.post('/login', loginValidation, (req, res) => {
-    const { username, email, password } = req.body;
-    db.query(
-        `SELECT * FROM users WHERE username = ${db.escape(
-            username)};`,
-        (err, result) => {
-            if (err) throw `something went wrong\n${err}`;
-            if (!result.length) {
-                res.status(401).json({
-                    message: "Username or password incorrect"
-                })
-            }
-            bcrypt.compare(password, result[0].password,
-                (bErr, bResult) => {
-                    if (bErr) {
-                        res.status(401).json({
-                            message: "Email or password incorrect"
-                        });
-                    }
-                    if (bResult) {
-                        const token = jwt.sign(
-                            { id: result[0].id },
-                            process.env.SECRET_KEY,
-                            { expiresIn: '1h' }
-                        );
-                        db.query(
-                            `UPDATE users SET last_login = now() WHERE id =${db.escape
-                                (result[0].id
+    const username = req.body.username;
+    const password = req.body.password;
 
-                                )};`
-                        )
-                        return res.status(200).json({
-                            message: "Login Successful",
-                            token,
-                            user: result[0]
-                        });
-                    }
-                    res.status(400).json({
+    const data = {
+    "username": req.body.username,
+    "password": req.body.password,
+    }
+
+    sData.push(data);
+    console.log("final product", sData);
+
+    console.log(username);
+
+    db.query(
+        'SELECT * FROM signup WHERE username = ?',
+        [req.body.username],
+        (err, results) => {
+            if (err) {
+                return res.status(500).json({
+                    message: err.message || 'Internal server error'
+                });
+            }
+            if (results.length === 0) {
+                return res.status(401).json({
+                    message: "Username or password incorrect"
+                });
+            }
+
+            const user = results[0];
+
+            bcrypt.compare(req.body.password, user.password, (bErr, bResult) => {
+                if (bErr || !bResult) {
+                    console.log(username)
+                    return res.status(401).json({
                         message: "Username or password incorrect"
                     });
+                    
                 }
-            )
+
+                const token = jwt.sign(
+                    { id: user.id },
+                    process.env.SECRET_KEY,
+                    { expiresIn: '1h' }
+                );
+
+                // Uncomment and use if you want to update the last login time
+                // db.query(
+                //     'UPDATE signup SET last_login = NOW() WHERE id = ?',
+                //     [user.id],
+                //     (updateErr) => {
+                //         if (updateErr) {
+                //             console.error("Failed to update last login time:", updateErr);
+                //         }
+                //     }
+                // );
+
+                return res.status(200).json({
+                    message: "Login Successful",
+                    token,
+                    user
+                });
+            });
         }
     );
 });
-
 router.post('/get-users', signupValidation, (req, res, next) => {
-    if (!req.headers.authorization ||
-         !req.headers.startsWith("Bearer") || 
-         req.headers.authorization.split('')[1]) {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
             message: "Unauthorized request"
         });
     }
-    
-    const decodedToken =  req.headers.authorization.split('')[1];
-    const token = jwt.verify(decodedToken, process.env.secretKey);
+
+    const token = authHeader.split(' ')[1];
+
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+    } catch (err) {
+        return res.status(401).json({
+            message: "Invalid or expired token"
+        });
+    }
+
+    const userId = decodedToken.id;
+
     db.query(
-        `SELECT * FROM users WHERE id = ${token.id}`,
-        (err, result) => {
-            if (err) {
-                res.status(401).json({
-                    message: "Unauthorized request"
+        'SELECT * FROM signup WHERE id = ?',
+        [userId],
+        (err, results) => {
+            if (err) return next(err);
+
+            if (results.length === 0) {
+                return res.status(404).json({
+                    error: true,
+                    message: "User not found"
                 });
             }
-            res.status(200).json({
-                users: result[0],
-                message: 'Fetching users successful'
+
+            return res.json({
+                error: false,
+                data: results[0],
+                message: "User fetched successfully"
             });
         }
     );
-})
-
+});
 module.exports = router;
