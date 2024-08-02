@@ -5,6 +5,7 @@ const path = require('path');
 const indexRouter = require('./signup/router');
 const paymentRouter = require('./paystack/routes/routes');
 const imageRouter = require('./profile/routes/router');
+const formRouter = require("./form/routes/formRoute");
 const PORT = process.env.PORT || 6000;
 
 app.get((req, res) => {
@@ -17,6 +18,7 @@ app.use(express.urlencoded({extended: true}));
 app.use('/api/v1', indexRouter);
 app.use('/api/v1', paymentRouter);
 app.use('/api/v1', imageRouter);
+app.use('/api/v1', formRouter);
 app.use('/images', express.static(path.join(__dirname+'/images')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
