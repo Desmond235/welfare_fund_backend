@@ -40,10 +40,10 @@ router.post('/signup', signupValidation, (req, res, next) => {
                             message: err.message || 'Error hashing password'
                         });
                     }
-
+ 
                     db.query(
                         'INSERT INTO signup (username, email, contact, password) VALUES (?, ?, ?, ?)',
-                        [req.body.username, req.body.email,req.body.contact, hash],
+                        [req.body.username, req.body.email,req.body.contact, hash,],
                         (err, result) => {
                             if (err) {
                                 return res.status(400).json({
@@ -73,7 +73,7 @@ router.post('/login', loginValidation, (req, res) => {
     }
 
     sData.push(data);
-    console.log("final product", sData);
+    console.log( sData);
 
     console.log(username);
 
