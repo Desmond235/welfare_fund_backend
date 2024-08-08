@@ -28,10 +28,12 @@ router.post('/signup', signupValidation, (req, res, next) => {
                     message: err.message || 'Internal server error'
                 });
             }
+            const user = result[0];
 
             if (result.length) {
                 return res.status(409).json({
                     message: 'Email already in use',
+                    user
                 });
             } else {
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -45,6 +47,7 @@ router.post('/signup', signupValidation, (req, res, next) => {
                         'INSERT INTO signup (username, email, contact, password) VALUES (?, ?, ?, ?)',
                         [req.body.username, req.body.email,req.body.contact, hash,],
                         (err, result) => {
+                            const user = result[0];
                             if (err) {
                                 return res.status(400).json({
                                     message: err.message || 'Something went wrong',
@@ -53,8 +56,11 @@ router.post('/signup', signupValidation, (req, res, next) => {
 
                             return res.status(201).json({
                                 message: 'You have registered successfully',
+                                user
                             });
-                        }
+
+                        },
+                        console.log(user)
                     );
                 });
             }
@@ -77,6 +83,23 @@ router.post('/login', loginValidation, (req, res) => {
 
     console.log(username);
 
+    var user;
+
+    db.query('SELECT * FROM signup WHERE email = ?',
+        [req.body.email],
+        (err, res) => {
+            if(err){
+                // return res.status(500).json({
+                //     message: err.message || 'Internal Server Error'
+                // })
+            }
+            // return res.status(200).json({
+            //     message: "Email successfully registered",
+            //     user
+            // });
+        }
+    )
+
     db.query(
         'SELECT * FROM signup WHERE username = ?',
         [req.body.username],
@@ -92,7 +115,7 @@ router.post('/login', loginValidation, (req, res) => {
                 });
             }
 
-            const user = results[0];
+             user = results[0];
 
             bcrypt.compare(req.body.password, user.password, (bErr, bResult) => {
                 if (bErr || !bResult) {
@@ -106,7 +129,7 @@ router.post('/login', loginValidation, (req, res) => {
                 const token = jwt.sign(
                     { id: user.id },
                     process.env.SECRET_KEY,
-                    { expiresIn: '1h' }
+                    { expiresIn: '10d' }
                 );
 
                 // Uncomment and use if you want to update the last login time
@@ -128,7 +151,10 @@ router.post('/login', loginValidation, (req, res) => {
             });
         }
     );
+
+   
 });
+
 router.post('/get-users', signupValidation, (req, res, next) => {
     const authHeader = req.headers.authorization;
 

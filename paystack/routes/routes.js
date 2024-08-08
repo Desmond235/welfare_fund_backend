@@ -4,5 +4,6 @@ const initializePayment= require('../controllers/controller');
 
 payment.post('/payment', initializePayment.acceptPayment);
 
+
 module.exports = payment;
 

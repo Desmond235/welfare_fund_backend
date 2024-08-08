@@ -6,22 +6,22 @@ const indexRouter = require('./signup/router');
 const paymentRouter = require('./paystack/routes/routes');
 const imageRouter = require('./profile/routes/router');
 const formRouter = require("./form/routes/router");
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 3000;
 
 app.get((req, res) => {
     res.send("server running")
 });
 
-
+app.get('*');
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: false}));
 app.use('/api/v1', indexRouter);
 app.use('/api/v1', paymentRouter);
 app.use('/api/v1', imageRouter);
 app.use('/api/v1', formRouter);
-app.use('/images', express.static(path.join(__dirname+'/images')))
+app.use('/images', express.static(path.join(__dirname,'images')))
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(function(req, res, next) {
     res.header('Content-Type', 'application/json');
     res.header('Access-Control-Allow-Origin', '*');
