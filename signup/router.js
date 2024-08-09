@@ -17,8 +17,10 @@ router.post('/signup', signupValidation, (req, res, next) => {
         "contact": req.body.contact,
         "password": req.body.password
     }
+
     data.push(pData);
     console.log("final product", pData);
+    
     db.query(
         'SELECT * FROM signup WHERE email = ?',
         [req.body.email],
@@ -28,6 +30,7 @@ router.post('/signup', signupValidation, (req, res, next) => {
                     message: err.message || 'Internal server error'
                 });
             }
+
             const user = result[0];
 
             if (result.length) {

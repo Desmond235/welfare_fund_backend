@@ -3,9 +3,11 @@ const bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
 const indexRouter = require('./signup/router');
-const paymentRouter = require('./paystack/routes/routes');
+// const paymentRouter = require('./paystack/routes/routes');
 const imageRouter = require('./profile/routes/router');
 const formRouter = require("./form/routes/router");
+const paymentRouter = require('./Payment/routes/payment_route')
+const verifyPaymentRouter = require('./Payment/routes/verify_payment')
 const PORT = process.env.PORT || 3000;
 
 app.get((req, res) => {
@@ -15,9 +17,11 @@ app.get((req, res) => {
 app.get('*');
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use('/api/v1', paymentRouter)
 app.use('/api/v1', indexRouter);
-app.use('/api/v1', paymentRouter);
+// app.use('/api/v1', paymentRouter);
 app.use('/api/v1', imageRouter);
+app.use('/api/v1', verifyPaymentRouter)
 app.use('/api/v1', formRouter);
 app.use('/images', express.static(path.join(__dirname,'images')))
 app.use(bodyParser.json());

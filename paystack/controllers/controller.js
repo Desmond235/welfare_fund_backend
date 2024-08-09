@@ -6,7 +6,7 @@ const https = require('https');
 const payStack = {
     acceptPayment: async (req, res) => {
         try {
-            const email = req.body.email;
+            const email = req
             const amount = req.body.amount
             const params = JSON.stringify({
                 'email': email,
@@ -22,13 +22,20 @@ const payStack = {
                 },
             }
             const clientReq = https.request(options, apiRes =>{
-                let data = '';
+                let data1 = '';
                 apiRes.on('data', (chunk)=>{
-                    data += chunk;
+                    data1 += chunk;
                 });
+
+                const {status, data} = clientReq.data1;
                 apiRes.on('end', () => {
                     console.log(JSON.parse(data));
-                    res.status(200).json(data);
+                    if(status){
+                        return res.status(200).json({
+                            status: true,
+                            authorization_url: data.authorization_urls
+                        });
+                    }
                 });
             }).on('error', (error) => {
                 console.log(error);
