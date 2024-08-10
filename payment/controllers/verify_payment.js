@@ -9,7 +9,7 @@ const verifyPayment = {
             const {reference} = req.body;
 
             const response = await axios.get(
-                `https/paystack.co/transaction/verify/${reference}`,
+                `https://paystack.co/transaction/verify/${reference}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${SECRET_KEY}`
@@ -25,11 +25,26 @@ const verifyPayment = {
                         message: 'Payment verified successfully',
                         data
                     })
+                } else {
+                    return res.json({
+                        success: false,
+                        message: 'Payment verification failed',
+                        data
+                    })
                 }
-
-                else {}
+            } else{
+                return res.json({
+                    success: false,
+                    message: "Failed to verify payment",
+                    data
+                });
             }
         } catch (error) {
+            return res.status(500).json({
+                status: false,
+                message: 'Server error',
+                error: error.message
+            })
             
         }
     }
