@@ -17,7 +17,8 @@ const makePayment = {
                 'https://api.paystack.co/transaction/initialize',
                 {
                     amount: amount * 100,
-                    email : email, // Amount in kobo
+                    email : email,
+                    channels: ["card", "mobile_money"], // Amount in kobo
                     callback_url,
                 },
                 {
