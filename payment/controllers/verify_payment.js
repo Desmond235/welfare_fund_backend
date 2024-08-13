@@ -6,10 +6,10 @@ const verifyPayment = {
     verifyPayment: async (req, res) => {
         try {
             const SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
-            const {reference} = req.body;
+            const {reference} = req.params;
 
             const response = await axios.get(
-                `https://paystack.co/transaction/verify/${reference}`,
+                `https://api.paystack.co/transaction/verify/${reference}`,
                 {
                     headers: {
                         'Authorization': `Bearer ${SECRET_KEY}`
@@ -17,6 +17,8 @@ const verifyPayment = {
                 },
             )
             const {status, data} = response.data;
+
+            console.log(reference);
 
             if(status){
                 if(data.status === 'success'){
@@ -40,12 +42,19 @@ const verifyPayment = {
                 });
             }
         } catch (error) {
-            return res.status(500).json({
-                status: false,
-                message: 'Server error',
-                error: error.message
-            })
-            
+            if (error.response && error.response.da) {
+                return res.status(error.response.status).json({
+                    status: false,
+                    message: 'Paystack verification failed',
+                    error: error.response.data.message || error.message
+                })
+            }else{
+                return res.status(500).json({
+                    status: false,
+                    message: 'server Error',
+                    error: error.message
+                })
+            }
         }
     }
 

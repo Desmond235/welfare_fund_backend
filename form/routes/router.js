@@ -4,26 +4,7 @@ const formRouter = express.Router();
 const db = require('../../dbConnection')
 
 
-const dbQueryItems = async (req, res) => {
-    const query = 'SELECT * FROM membership';
-    db.query(query, (err, results) => {
-        if (err) {
-            return res.status(500).json({
-                error: true,
-                message: "Database query failed"
-            });
-        }
 
-        const user = results[0];
-        return res.status(200).json({
-            error: false,
-            message: "Records sent successfully",
-            user
-        });
-    });
-};
- 
-formRouter.get('/get-details', dbQueryItems )
 formRouter.post('/send-details', (req, res) => {
         const data = {
             "userId": req.body.userId,
@@ -62,7 +43,7 @@ formRouter.post('/send-details', (req, res) => {
 
         const dbQuery =  'INSERT INTO membership (userID, `full_name`, date_of_birth, date_of_registration, amount_paid, amount_in_words,'+ 
         'receipt_no, contact, house_number, place_of_abode, land_mark, home_town, region, marital_status, others, name_of_spouse,'+
-         'life_status, no_of_children, names_of_chidren, occupation, fathers_name, father_life_status, mothers_name, mother_iife_status,'+
+         'life_status, no_of_children, names_of_children, occupation, fathers_name, father_life_status, mothers_name, mother_life_status,'+
           'next_of_kin, next_of_kin_contact,' + 'class_leader, class_leader_contact, organization_of_member, org_leader_contact)'+
           'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 

@@ -136,15 +136,15 @@ router.post('/login', loginValidation, (req, res) => {
                 );
 
                 // Uncomment and use if you want to update the last login time
-                // db.query(
-                //     'UPDATE signup SET last_login = NOW() WHERE id = ?',
-                //     [user.id],
-                //     (updateErr) => {
-                //         if (updateErr) {
-                //             console.error("Failed to update last login time:", updateErr);
-                //         }
-                //     }
-                // );
+                db.query(
+                    'UPDATE signup SET last_login = NOW() WHERE id = ?',
+                    [user.id],
+                    (updateErr) => {
+                        if (updateErr) {
+                            console.error("Failed to update last login time:", updateErr);
+                        }
+                    }
+                );
 
                 return res.status(200).json({
                     message: "Login Successful",

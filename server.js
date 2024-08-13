@@ -7,7 +7,8 @@ const indexRouter = require('./signup/router');
 const imageRouter = require('./profile/routes/router');
 const formRouter = require("./form/routes/router");
 const paymentRouter = require('./Payment/routes/payment_route')
-const verifyPaymentRouter = require('./Payment/routes/verify_payment')
+const verifyPaymentRouter = require('./Payment/routes/verify_payment');
+const membershipRouter = require('./form/routes/membership_router');
 const PORT = process.env.PORT || 3000;
 
 app.get((req, res) => {
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use('/api/v1', paymentRouter)
 app.use('/api/v1', indexRouter);
+app.use('/api/v1', membershipRouter)
 // app.use('/api/v1', paymentRouter);
 app.use('/api/v1', imageRouter);
 app.use('/api/v1', verifyPaymentRouter)
