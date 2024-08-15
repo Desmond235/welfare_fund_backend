@@ -7,7 +7,6 @@ const db = require('../../dbConnection')
 
 formRouter.post('/send-details', (req, res) => {
         const data = {
-            "userId": req.body.userId,
             "fullName": req.body.fullName,
             "dateOfBirth": req.body.dateOfBirth,
             "dateOfRegistration": req.body.dateOfRegistration,
@@ -41,15 +40,15 @@ formRouter.post('/send-details', (req, res) => {
 
         console.log(data);
 
-        const dbQuery =  'INSERT INTO membership (userID, `full_name`, date_of_birth, date_of_registration, amount_paid, amount_in_words,'+ 
+        const dbQuery =  'INSERT INTO membership (full_name, date_of_birth, date_of_registration, amount_paid, amount_in_words,'+ 
         'receipt_no, contact, house_number, place_of_abode, land_mark, home_town, region, marital_status, others, name_of_spouse,'+
          'life_status, no_of_children, names_of_children, occupation, fathers_name, father_life_status, mothers_name, mother_life_status,'+
           'next_of_kin, next_of_kin_contact,' + 'class_leader, class_leader_contact, organization_of_member, org_leader_contact)'+
-          'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+          'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
         const query = 'INSERT INTO membership VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const values = [
-            req.body.userId, req.body.fullName, req.body.dateOfBirth, req.body.dateOfRegistration, req.body.amountPaid,
+            req.body.fullName, req.body.dateOfBirth, req.body.dateOfRegistration, req.body.amountPaid,
             req.body.amountInWords, req.body.receiptNumber, req.body.contact, req.body.houseNo,
             req.body.placeOfAbode, req.body.landmark, req.body.homeTown, req.body.region, req.body.maritalStatus,
             req.body.others, req.body.nameOfSpouse, req.body.lifeStatus, req.body.numberOfChildren,
