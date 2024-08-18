@@ -1,5 +1,7 @@
 const axios = require('axios');
 require('dotenv').config();
+const db = require('../../dbConnection')
+const {format} = require('date-fns');
 
 
 const verifyPayment = {
@@ -22,11 +24,24 @@ const verifyPayment = {
 
             if(status){
                 if(data.status === 'success'){
+
+                    const date = format(Date.now(), 'yyyy-MM-dd');
+                    const query = 'INSERT INTO transaction (amount, email, date) VALUES(?, ?, ?)';
+                    const values = [data.amount / 100, data.customer.email, date ];
+                    
+                    db.query(query, values, (err, result) => {
+                        if(err){
+                            return res.status(400).json({
+                                message: 'An error occurred while inserting data into the database'
+                            });
+                        }  
+                    })
                     return res.json({
                         success: true,
                         message: 'Payment verified successfully',
                         data
                     })
+                    
                 } else {
                     return res.json({
                         success: false,
@@ -42,7 +57,7 @@ const verifyPayment = {
                 });
             }
         } catch (error) {
-            if (error.response && error.response.da) {
+            if (error.response) {
                 return res.status(error.response.status).json({
                     status: false,
                     message: 'Paystack verification failed',

@@ -66,7 +66,8 @@ formRouter.post('/send-details', (req, res) => {
                 });
             }
             return res.status(200).json({
-                message: "records sent successfully"
+                message: "records sent successfully",
+                id: result.insertId,
             });
         });
      

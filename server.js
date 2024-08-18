@@ -10,11 +10,17 @@ const paymentRouter = require('./Payment/routes/payment_route')
 const verifyPaymentRouter = require('./Payment/routes/verify_payment');
 const membershipRouter = require('./form/routes/membership_router');
 const updateMembersRouter = require('./form/routes/update_members_router');
+const getMembersRouter = require('./admin/route/get_members_router');
+const getTransactionsRouter = require('./admin/route/get_transactions_router');
 const PORT = process.env.PORT || 3000;
 
 app.get((req, res) => {
     res.send("server running")
 });
+
+// admin routers
+app.use('/api/admin', getMembersRouter);
+app.use('/api/admin', getTransactionsRouter);
 
 app.get('*');
 app.use(express.json());
@@ -27,6 +33,7 @@ app.use('/api/v1', imageRouter);
 app.use('/api/v1', verifyPaymentRouter)
 app.use('/api/v1', formRouter);
 app.use('/api/v1', updateMembersRouter)
+
 app.use('/images', express.static(path.join(__dirname,'images')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -9,13 +9,7 @@ const updateMembers = {
             mLifeStatus, nextOfKin, nextOfKinContact, classLeader,
             classLeaderContact, orgOfMember, orgLeaderContact } = req.body;
 
-        const e = {
-            "dateOfBirth": "Aug, 2, 2008",
-            "dateOfRegistration": "Aug 2, 2024",
-            "contact": "7756",
-            "region": "scvb",
-            "occupation": "retyui"
-        }
+       
 
         const query = 'UPDATE `membership` SET `full_name` = ?, `date_of_birth` = ?, `date_of_registration` = ?,' +
             '`contact` = ?, `house_number` = ?, `place_of_abode` = ?, `land_mark` = ?, `home_town` = ?, `region` = ?, `marital_status` = ?,' +
@@ -46,7 +40,7 @@ const updateMembers = {
                 return res.status(200).json({
                     message: 'Member updated successfully',
                     data: {
-                        id: id,
+                        id:                        id,
                         fullname:                  fullName,
                         dateOfBirth:               dateOfBirth,
                         dateOfRegistration:        dateOfRegistration,

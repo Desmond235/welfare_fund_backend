@@ -50,16 +50,23 @@ router.post('/signup', signupValidation, (req, res, next) => {
                         'INSERT INTO signup (username, email, contact, password) VALUES (?, ?, ?, ?)',
                         [req.body.username, req.body.email,req.body.contact, hash,],
                         (err, result) => {
-                            const user = result[0];
                             if (err) {
                                 return res.status(400).json({
                                     message: err.message || 'Something went wrong',
                                 });
                             }
 
+                            if (result && result.length > 0) {
+                                // Access the first result
+                                const firstResult = result[0];
+                                // Process your result here
+                              } else {
+                                console.log('No results found.');
+                              }
+
                             return res.status(201).json({
                                 message: 'You have registered successfully',
-                                user
+                                
                             });
 
                         },
@@ -136,15 +143,15 @@ router.post('/login', loginValidation, (req, res) => {
                 );
 
                 // Uncomment and use if you want to update the last login time
-                db.query(
-                    'UPDATE signup SET last_login = NOW() WHERE id = ?',
-                    [user.id],
-                    (updateErr) => {
-                        if (updateErr) {
-                            console.error("Failed to update last login time:", updateErr);
-                        }
-                    }
-                );
+                // db.query(
+                //     'UPDATE signup SET last_login = NOW() WHERE id = ?',
+                //     [user.id],
+                //     (updateErr) => {
+                //         if (updateErr) {
+                //             console.error("Failed to update last login time:", updateErr);
+                //         }
+                //     }
+                // );
 
                 return res.status(200).json({
                     message: "Login Successful",

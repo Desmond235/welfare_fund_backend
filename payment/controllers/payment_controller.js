@@ -19,7 +19,7 @@ const makePayment = {
                     amount: amount * 100,
                     email : email,
                     channels: ["card", "mobile_money"], // Amount in kobo
-                    callback_url,
+                    
                 },
                 {
                     headers: {
@@ -37,6 +37,7 @@ const makePayment = {
                     success: true,
                     authorization_url: data.authorization_url,
                     reference : data.reference,
+                    metadata: req.body.metadata,
                     data
                 });
             } else {
