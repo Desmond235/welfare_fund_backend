@@ -139,8 +139,9 @@ router.post('/login', loginValidation, (req, res) => {
                 const token = jwt.sign(
                     { id: user.id },
                     process.env.SECRET_KEY,
-                    { expiresIn: '10d' }
-                );
+                    { expiresIn: '30d' }
+                );  
+                
 
                 // Uncomment and use if you want to update the last login time
                 // db.query(
@@ -167,6 +168,7 @@ router.post('/login', loginValidation, (req, res) => {
 
 router.post('/get-users', signupValidation, (req, res, next) => {
     const authHeader = req.headers.authorization;
+    
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
