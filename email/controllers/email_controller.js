@@ -27,8 +27,8 @@ const sendMail = {
             from: process.env.EMAIL,
             to: req.body.email,
             subject: "Verify your account" ,
-            text: `Your verification is ${otp}`,
-            html: `<br> Your verification is <b>${otp}</b>`
+            text: `Please verify your account. Your verification is ${otp}`,
+            html: `<br><p style="color:grey; font-size:1.3em;" > Please verify your account. Below is your verification code</p> <p><h1 style = "color:black;">${otp}</h1></p>`
         };
 
         db.query("INSERT INTO otp VALUES (?, ?)", [otp, expiryDate], (err, result) => {
@@ -55,32 +55,5 @@ const sendMail = {
 }
 
 
-const verifyOtp = {
-    verifyOtp: async (req, res) => { 
-        const id = req.params.id;
-
-        db.query("SELECT * FROM otp WHERE id =?", [id], (err, result) => {
-            if(err){
-                return res.status(400).json({
-                    message: 'An error occurred while retrieving OTP from the database'
-                });
-            }else if(result.length === 0){
-                return res.status(404).json({
-                    message: 'OTP not found or expired'
-                });
-            } else if(result.expiry_date > Date.now()){
-                return res.status(400).json({
-                    message: 'OTP expired'
-                });
-            }
-            else{
-                return res.status(200).json({
-                    message: 'OTP verified successfully'
-                });
-            }
-        })
-    }
-}
 
 module.exports = sendMail;
-module.exports = verifyOtp;
