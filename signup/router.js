@@ -70,7 +70,6 @@ router.post('/signup', signupValidation, (req, res, next) => {
                             });
 
                         },
-                        console.log(user)
                     );
                 });
             }

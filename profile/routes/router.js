@@ -27,7 +27,7 @@ const uploadFile = multer({storage: fileStorage})
 
 ImageRouter.post('/send-image', uploadFile.single('image'), (req, res) => {
   const image = {
-    imagePath: `http://localhost:3000/images/${req.file.filename}`,
+    imagePath: `http://10.0.2.2:3000/images/${req.file.filename}`,
   };
   const query = 'INSERT INTO images(image_path) VALUES (?)';
   const images = [image.imagePath];

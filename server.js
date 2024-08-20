@@ -10,8 +10,8 @@ const paymentRouter = require('./Payment/routes/payment_route')
 const verifyPaymentRouter = require('./Payment/routes/verify_payment');
 const membershipRouter = require('./form/routes/membership_router');
 const updateMembersRouter = require('./form/routes/update_members_router');
-const getMembersRouter = require('./admin/route/get_members_router');
-const getTransactionsRouter = require('./admin/route/get_transactions_router');
+const getMembersRouter = require('./admin/routes/get_members_router');
+const getTransactionsRouter = require('./admin/routes/get_transactions_router');
 const PORT = process.env.PORT || 3000;
 
 app.get((req, res) => {

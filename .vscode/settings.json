@@ -7,10 +7,13 @@
         "scrollbar.shadow": "#00000000"
     },
     "cSpell.words": [
+        "BREVO",
         "fullname",
+        "getbrevo",
         "initiliaze",
         "mycallback",
         "paystack",
-        "Secrekey"
+        "Secrekey",
+        "Transac"
     ]
 }
