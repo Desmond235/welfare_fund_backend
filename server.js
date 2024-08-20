@@ -12,6 +12,7 @@ const membershipRouter = require('./form/routes/membership_router');
 const updateMembersRouter = require('./form/routes/update_members_router');
 const getMembersRouter = require('./admin/routes/get_members_router');
 const getTransactionsRouter = require('./admin/routes/get_transactions_router');
+const emailRouter = require('./email/routes/router');
 const PORT = process.env.PORT || 3000;
 
 app.get((req, res) => {
@@ -22,12 +23,14 @@ app.get((req, res) => {
 app.use('/api/admin', getMembersRouter);
 app.use('/api/admin', getTransactionsRouter);
 
+
 app.get('*');
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use('/api/v1', paymentRouter)
 app.use('/api/v1', indexRouter);
 app.use('/api/v1', membershipRouter)
+app.use('/api/v1', emailRouter)
 // app.use('/api/v1', paymentRouter);
 app.use('/api/v1', imageRouter);
 app.use('/api/v1', verifyPaymentRouter)
