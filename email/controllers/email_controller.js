@@ -31,7 +31,7 @@ const sendMail = {
             html: `<br><p style="color:grey; font-size:1.3em;" > Please verify your account. Below is your verification code</p> <p><h1 style = "color:black;">${otp}</h1></p>`
         };
 
-        db.query("INSERT INTO otp VALUES (?, ?)", [otp, expiryDate], (err, result) => {
+        db.query("INSERT INTO otp (otp, expiry_date) VALUES (?, ?)", [otp, expiryDate], (err, result) => {
             if(err){
                 return res.status(400).json({
                     message: 'An error occurred while inserting OTP into the database'
