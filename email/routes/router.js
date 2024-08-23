@@ -5,6 +5,6 @@ const verifyEmail = require('../controllers/verify_email')
 
 
 emailRouter.post('/send-email', sendMail.sendEmail);
-emailRouter.post('/verify-email/:id', verifyEmail.verifyOtp);
+emailRouter.post('/verify-email', verifyEmail.verifyOtp);
 
 module.exports = emailRouter;

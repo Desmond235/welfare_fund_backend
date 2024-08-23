@@ -2,7 +2,6 @@ const db = require('../../dbConnection');
 
 const verifyOtp = {
     verifyOtp: async (req, res) => {
-        const id = req.params.id;
         const date =  Date.now();
 
         const otp = req.body.otp;
