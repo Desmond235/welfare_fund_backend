@@ -4,44 +4,83 @@ const bcrypt = require('bcrypt');
 const verify = {
   verifyCredentials: async (req, res) =>{
 
-    console.log(req.body);
-
     const username = req.body.username;
     const password = req.body.password;
 
-    const query = 'SELECT * FROM admin_credentials WHERE username = ?';
+    const data = {
+    "username": req.body.username,
+    "password": req.body.password,
+    }
+
+    var user;
+
+    // db.query('SELECT * FROM signup WHERE email = ?',
+    //     [req.body.email],
+    //     (err, res) => {
+    //         if(err){
+    //             // return res.status(500).json({
+    //             //     message: err.message || 'Internal Server Error'
+    //             // })
+    //         }
+    //         // return res.status(200).json({
+    //         //     message: "Email successfully registered",
+    //         //     user
+    //         // });
+    //     }
+    // )
+
     db.query(
-      query,
-      [username],
-      (err, results) => {
-        if (err) {
-          return res.status(500).json({
-            message: err.message || 'Internal server error'
-          });
+        'SELECT * FROM admin_credentials WHERE username = ?',
+        [req.body.username],
+        (err, results) => {
+            if (err) {
+                return res.status(500).json({
+                    message: err.message || 'Internal server error'
+                });
+            }
+            if (results.length === 0) {
+                return res.status(401).json({
+                    message: "Username or password incorrect"
+                });
+            }
+
+             user = results[0];
+
+            bcrypt.compare(req.body.password, user.password, (bErr, bResult) => {
+                if (bErr || !bResult) {
+                    console.log(username)
+                    return res.status(401).json({
+                        message: "Username or password incorrect"
+                    });
+                    
+                }
+
+                const token = jwt.sign(
+                    { id: user.id },
+                    process.env.SECRET_KEY,
+                    { expiresIn: '30d' }
+                );  
+                
+
+                // Uncomment and use if you want to update the last login time
+                // db.query(
+                //     'UPDATE signup SET last_login = NOW() WHERE id = ?',
+                //     [user.id],
+                //     (updateErr) => {
+                //         if (updateErr) {
+                //             console.error("Failed to update last login time:", updateErr);
+                //         }
+                //     }
+                // );
+
+                return res.status(200).json({
+                    message: "Login Successful",
+                    token,
+                    user
+                });
+            });
         }
-
-        const user = results[0];
-        if(results.length === 0){
-          return res.status(404).json({
-            message: "Username or password incorrect"
-          })
-        }
-
-        bcrypt.compare(password, user.password, (bErr, bResult) => {
-          if(bErr || !bResult){
-            return res.status(401).json({
-              error: true,
-              message: "Username or password incorrect"
-            })
-          }
-
-          return res.status(200).json({
-            error: false,
-            message: "User authenticated successfully"
-          })
-        })
-      }
-    )
+    );
   }
 }
 
