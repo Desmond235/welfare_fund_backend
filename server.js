@@ -12,6 +12,7 @@ const membershipRouter = require('./form/routes/membership_router');
 const updateMembersRouter = require('./form/routes/update_members_router');
 const getMembersRouter = require('./admin/routes/get_members_router');
 const getTransactionsRouter = require('./admin/routes/get_transactions_router');
+const adminCredentialsRouter = require('./admin/routes/admin_controller');
 const emailRouter = require('./email/routes/router');
 const PORT = process.env.PORT || 3000;
 
@@ -19,14 +20,16 @@ app.get((req, res) => {
     res.send("server running")
 });
 
-// admin routers
-app.use('/api/admin', getMembersRouter);
-app.use('/api/admin', getTransactionsRouter);
-
-
 app.get('*');
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+// admin routers
+app.use('/api/admin', getMembersRouter);
+app.use('/api/admin', getTransactionsRouter);
+app.use('/api/admin', adminCredentialsRouter);
+
+
 app.use('/api/v1', paymentRouter)
 app.use('/api/v1', indexRouter);
 app.use('/api/v1', membershipRouter)
