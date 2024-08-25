@@ -11,8 +11,8 @@ const update = {
                     message: err.message || 'Error hashing password'
                 });
             }
-            db.query("UPDATE admin_credentials SET username = ?, password = ? WHERE id = ?",
-                [username, hash, id], 
+            db.query("UPDATE admin_credentials SET username = ?, password = ?",
+                [username, hash], 
                 (err, result) => {
                if (err) {
                    return res.status(400).json({

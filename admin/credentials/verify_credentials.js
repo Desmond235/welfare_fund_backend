@@ -31,7 +31,7 @@ const verify = {
 
     db.query(
         'SELECT * FROM admin_credentials WHERE username = ?',
-        [req.body.username],
+        [req.body.username,],
         (err, results) => {
             if (err) {
                 return res.status(500).json({
@@ -54,12 +54,6 @@ const verify = {
                     });
                     
                 }
-
-                const token = jwt.sign(
-                    { id: user.id },
-                    process.env.SECRET_KEY,
-                    { expiresIn: '30d' }
-                );  
                 
 
                 // Uncomment and use if you want to update the last login time
@@ -75,8 +69,7 @@ const verify = {
 
                 return res.status(200).json({
                     message: "Login Successful",
-                    token,
-                    user
+                  
                 });
             });
         }

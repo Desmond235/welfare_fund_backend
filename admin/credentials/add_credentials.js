@@ -4,7 +4,7 @@
  const AddCredentials = {
      addCredentials: async (req, res) => {
          const { username, password } = req.body;
-         const hashedPassword = await bcrypt.hash(password, 10, (err, hash) =>{
+         const hashedPassword =  bcrypt.hash(password, 10, (err, hash) =>{
              if (err) {
                  return res.status(500).json({
                      error: true,
