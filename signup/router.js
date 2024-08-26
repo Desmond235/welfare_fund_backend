@@ -4,12 +4,14 @@ const { signupValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require('bcrypt');
 const db = require('../dbConnection');
 const jwt = require('jsonwebtoken');
+const changePassword = require('./controller/change_password')
 require('dotenv').config();
 const e = require('express');
 
 const data = [];
 const sData = [];
 
+router.post('/change-password', changePassword.changePassword)
 router.post('/signup', signupValidation, (req, res, next) => {
     const pData = {
         "username": req.body.username,
@@ -164,6 +166,8 @@ router.post('/login', loginValidation, (req, res) => {
 
    
 });
+
+
 
 router.post('/get-users', signupValidation, (req, res, next) => {
     const authHeader = req.headers.authorization;
