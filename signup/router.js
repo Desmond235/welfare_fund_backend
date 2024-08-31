@@ -21,7 +21,7 @@ router.post('/signup', signupValidation, (req, res, next) => {
     }
 
     data.push(pData);
-    console.log("final product", pData);
+    console.log("details", pData);
     
     db.query(
         'SELECT * FROM signup WHERE email = ?',

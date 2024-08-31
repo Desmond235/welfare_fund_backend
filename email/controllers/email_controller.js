@@ -7,10 +7,10 @@ const sendMail = {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                type: 'OAuth2',
-                clientId: process.env.CLIENT_ID,
-                clientSecret: process.env.CLIENT_SECRET,
-                refreshToken: process.env.REFRESH_TOKEN,
+                // type: 'OAuth2',
+                // clientId: process.env.CLIENT_ID,
+                // clientSecret: process.env.CLIENT_SECRET,
+                // refreshToken: process.env.REFRESH_TOKEN,
                 user: process.env.EMAIL,
                 pass: process.env.EMAIL_PASSWORD
             }
