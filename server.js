@@ -14,6 +14,9 @@ const getMembersRouter = require('./admin/routes/get_members_router');
 const getTransactionsRouter = require('./admin/routes/get_transactions_router');
 const adminCredentialsRouter = require('./admin/routes/admin_controller');
 const emailRouter = require('./email/routes/router');
+const router = require('./views/router');
+
+
 const PORT = process.env.PORT || 3000;
 
 app.get((req, res) => {
@@ -24,12 +27,14 @@ app.get('*');
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+
+
 // admin routers
 app.use('/api/admin', getMembersRouter);
 app.use('/api/admin', getTransactionsRouter);
 app.use('/api/admin', adminCredentialsRouter);
 
-
+app.use('/', require('./views/router'))
 app.use('/api/v1', paymentRouter)
 app.use('/api/v1', indexRouter);
 app.use('/api/v1', membershipRouter)
@@ -51,6 +56,7 @@ app.use(function(req, res, next) {
     next();
  
 });
+
 
 // middleware for error handling
 app.use((err, req, res, next) => {
