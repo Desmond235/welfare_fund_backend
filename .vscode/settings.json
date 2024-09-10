@@ -8,9 +8,11 @@
     },
     "cSpell.words": [
         "BREVO",
+        "firstname",
         "fullname",
         "getbrevo",
         "initiliaze",
+        "lastname",
         "mycallback",
         "paystack",
         "Secrekey",

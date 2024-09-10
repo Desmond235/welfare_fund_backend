@@ -26,8 +26,8 @@ const verifyPayment = {
                 if(data.status === 'success'){
 
                     const date = format(Date.now(), 'yyyy-MM-dd');
-                    const query = 'INSERT INTO transaction (amount, email, date) VALUES(?, ?, ?)';
-                    const values = [data.amount / 100, data.customer.email, date ];
+                    const query = 'INSERT INTO transaction (firstname,lastname,amount, email, date) VALUES(?, ?, ?, ?, ?)';
+                    const values = [data.customer.first_name, data.customer.last_name, data.amount / 100, data.customer.email, date ];
                     
                     db.query(query, values, (err, result) => {
                         if(err){
