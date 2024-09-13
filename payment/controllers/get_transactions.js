@@ -4,10 +4,9 @@ const transactions = {
     getTransactions: async (req, res) => {
        try {
         const {id } = req.params
-         const query = 'SELECT * FROM transaction WHERE id = ?'
+         const query = 'SELECT * FROM transaction'
          db.query(
             query,
-            [id],
             (err, result) => {
                 if(err){
                     return res.status(400).json({
