@@ -2,12 +2,14 @@ const express = require('express');
 const crypto = require('node:crypto');
 const paymentRouter = express.Router();
 const makePayment = require('../controllers/payment_controller');
+const getTransactions = require('../controllers/get_transactions');
 require('dotenv').config();
 
 const secret = process.env.PAYSTACK_SECRET_KEY;
 
 
 paymentRouter.post('/receive-payment',makePayment.receivePayment );
+paymentRouter.get('/get-transactions/:id', getTransactions.getTransactions);
 paymentRouter.post('/', async (req, res) => {
     const hash = crypto.createHmac('sha512', secret ).update(JSON.stringify(req.body)).digest('hex');
     console.log(hash);
