@@ -14,8 +14,10 @@
         "initiliaze",
         "lastname",
         "mycallback",
+        "Nexmo",
         "paystack",
         "Secrekey",
-        "Transac"
+        "Transac",
+        "vonage"
     ]
 }
