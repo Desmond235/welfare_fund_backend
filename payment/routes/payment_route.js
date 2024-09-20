@@ -9,7 +9,7 @@ const secret = process.env.PAYSTACK_SECRET_KEY;
 
 
 paymentRouter.post('/receive-payment',makePayment.receivePayment );
-paymentRouter.get('/get-transactions', getTransactions.getTransactions);
+paymentRouter.get('/get-transactions/:userId', getTransactions.getTransactions);
 paymentRouter.post('/', async (req, res) => {
     const hash = crypto.createHmac('sha512', secret ).update(JSON.stringify(req.body)).digest('hex');
     console.log(hash);

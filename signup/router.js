@@ -16,7 +16,6 @@ router.post('/signup', signupValidation, (req, res, next) => {
     const pData = {
         "username": req.body.username,
         "email": req.body.email,
-        "contact": req.body.contact,
         "password": req.body.password
     }
 
@@ -49,8 +48,8 @@ router.post('/signup', signupValidation, (req, res, next) => {
                     }
  
                     db.query(
-                        'INSERT INTO signup (username, email, contact, password) VALUES (?, ?, ?, ?)',
-                        [req.body.username, req.body.email,req.body.contact, hash,],
+                        'INSERT INTO signup (username, email, password) VALUES (?, ?, ?)',
+                        [req.body.username, req.body.email, hash,],
                         (err, result) => {
                             if (err) {
                                 return res.status(400).json({
@@ -68,6 +67,7 @@ router.post('/signup', signupValidation, (req, res, next) => {
 
                             return res.status(201).json({
                                 message: 'You have registered successfully',
+                                userId: result.insertId
                                 
                             });
 

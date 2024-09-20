@@ -3,10 +3,12 @@ const db = require('../../dbConnection');
 const transactions = {
     getTransactions: async (req, res) => {
        try {
-        const {id } = req.params
-         const query = 'SELECT * FROM transaction'
+        const {userId } = req.params
+         const query = 'SELECT * FROM transaction WHERE userId = ?'
+         
          db.query(
             query,
+            [userId],
             (err, result) => {
                 if(err){
                     return res.status(400).json({
