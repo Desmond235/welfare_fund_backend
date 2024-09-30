@@ -23,7 +23,7 @@ const verifyPayment = {
                     const query = 'INSERT INTO transaction (userId, firstname, lastname, amount, email, date) VALUES(?, ?, ?, ?, ?, ?)';
                     const values = [ id, data.customer.first_name, data.customer.last_name, data.amount / 100, data.customer.email, date];
                     db.query(
-                        query,
+                        query,  
                         values,
                         (err, result) => {
                             if (err) {
@@ -36,7 +36,14 @@ const verifyPayment = {
                                 id: result.insertId,
                                 success: true,
                                 message: 'Payment verified successfully',
-                                data
+                                data:{
+                                    id: result.insertId,
+                                    firstname: data.customer.first_name,
+                                    lastname: data.customer.last_name,
+                                    amount: data.amount / 100,
+                                    email: data.customer.email,
+                                    date: date
+                                }
                             })
                         }
                     )
