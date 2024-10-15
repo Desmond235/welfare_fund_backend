@@ -34,6 +34,7 @@ const verifyPayment = {
 
                             return res.json({
                                 id: result.insertId,
+                                userId: parseInt(id),
                                 success: true,
                                 message: 'Payment verified successfully',
                                 data:{
