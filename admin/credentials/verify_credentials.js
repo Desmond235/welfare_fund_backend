@@ -1,3 +1,4 @@
+const { result } = require('lodash');
 const db = require('../../dbConnection');
 const bcrypt = require('bcrypt');
 
@@ -69,6 +70,7 @@ const verify = {
 
                 return res.status(200).json({
                     message: "Login Successful",
+                    data: results
                   
                 });
             });
