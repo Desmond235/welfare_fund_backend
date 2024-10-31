@@ -4,8 +4,6 @@ const bcrypt = require('bcrypt');
 
 const change = {
     changePassword: async (req, res) => {
-        const {username} = req.body;
-        console.log(username);
         console.log(req.body.password);
          bcrypt.hash(req.body.password, 10, (err, hash) => {
             if (err) {
@@ -13,8 +11,8 @@ const change = {
                     message: err.message || 'Error hashing password'
                 });
             }
-            db.query("UPDATE signup SET password = ? WHERE username = ?",
-                [hash, username], 
+            db.query("UPDATE signup SET password = ?",
+                [hash], 
                 (err, result) => {
                if (err) {
                    return res.status(400).json({

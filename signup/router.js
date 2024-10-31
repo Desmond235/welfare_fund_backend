@@ -11,7 +11,38 @@ const e = require('express');
 const data = [];
 const sData = [];
 
-router.post('/change-password', changePassword.changePassword)
+router.post('/change-password', changePassword.changePassword);
+router.post('/check-email/:id', (req, res) => {
+    const {email} = req.body;
+    const {id} = req.params;
+    console.log(id)
+
+    db.query(
+        'SELECT * FROM signup WHERE email = ? AND id = ?',
+        [email, Number(id)],
+        (err, result) => {
+            if (err){
+                return res.status(500).json({
+                    message: err.message || 'Internal Server Error'
+                })
+            }
+            if(!result.length){
+                return res.status(404).json({
+                    success: false,
+                    message: "Email does not exist",
+                    
+                })
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'Email exits',
+                email: email,
+                data: result
+            })
+        }
+    )
+})
 router.post('/signup', signupValidation, (req, res, next) => {
     const pData = {
         "username": req.body.username,

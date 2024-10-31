@@ -3,6 +3,7 @@ const db = require('../../dbConnection')
 const updateMembers = {
     updateMembership: async (req, res) => {
         const { id } = req.params;
+        console.log(id);
         const { fullName, dateOfBirth, dateOfRegistration,
             contact, houseNo, placeOfAbode, landmark, homeTown, region,
             maritalStatus, nameOfSpouse, lifeStatus, occupation, fatherName, fLifeStatus, motherName,
